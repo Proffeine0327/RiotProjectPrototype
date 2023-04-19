@@ -18,8 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform camPivot;
     [SerializeField] private Vector2 camSensivity;
 
-    private CharacterController cc;
-    private float Yvelocity;
+    private Rigidbody rb;
     private float camRotationX;
 
     public void Damage(float amount)
@@ -34,7 +33,7 @@ public class Player : MonoBehaviour
 
         hp = maxHp;
 
-        cc = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
@@ -58,25 +57,21 @@ public class Player : MonoBehaviour
         {
             Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, Time.deltaTime * 10);
         }
-        
-        if(!cc.isGrounded) Yvelocity -= 9.8f * gravityMultiplier * Time.deltaTime;
-        else Yvelocity = 0;
 
+        velocity.y = rb.velocity.y;
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Yvelocity = jumpScale;
+            velocity.y = jumpScale;
             transform.Translate(0, jumpScale * Time.deltaTime, 0);
         }
         
-        velocity.y = Yvelocity;
-        
-        cc.Move(velocity * Time.deltaTime);
+        rb.velocity = velocity;
     }
 
     private void CameraMove()
     {
-        var x = Input.GetAxisRaw("Mouse X");
-        var y = Input.GetAxisRaw("Mouse Y");
+        var x = Input.GetAxis("Mouse X");
+        var y = Input.GetAxis("Mouse Y");
 
         transform.Rotate(0, x * camSensivity.x * Time.deltaTime, 0);
         
