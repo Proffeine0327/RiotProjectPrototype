@@ -14,6 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float gravityMultiplier;
     [SerializeField] private float jumpScale;
+    [SerializeField] private float groundCastRadius;
+    [SerializeField] private Vector3 groundCastOffset;
+    [SerializeField] private LayerMask groundCastLayer;
     [Header("Camera")]
     [SerializeField] private Transform camPivot;
     [SerializeField] private Vector2 camSensivity;
@@ -21,14 +24,25 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     private float camRotationX;
 
-    public void Damage(float amount)
+    public void Damage(float amount, Vector3 targetpos)
     {
         if(!isInvincible)
+        {
+            var pos = transform.position - targetpos;
+            pos.y = 0;
+            pos = pos.normalized;
+            pos.y = 1.5f;
+
+            rb.AddForce(pos * 200);
             hp -= amount;
+        }
     }
 
     private void Awake()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         player = this;
 
         hp = maxHp;
@@ -46,11 +60,12 @@ public class Player : MonoBehaviour
     {
         var h = Input.GetAxisRaw("Horizontal");
         var v = Input.GetAxisRaw("Vertical");
+        var isGround = Physics.CheckSphere(transform.position + groundCastOffset, groundCastRadius, groundCastLayer);
 
-        var velocity = transform.TransformDirection(new Vector3(h, 0, v).normalized * moveSpeed);
+        var dir = transform.TransformDirection(new Vector3(h, 0, v).normalized * moveSpeed);
         if(Input.GetKey(KeyCode.LeftShift))
         {
-            velocity *= 1.5f;
+            dir *= 1.5f;
             Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 70, Time.deltaTime * 10);
         }
         else
@@ -58,14 +73,13 @@ public class Player : MonoBehaviour
             Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 60, Time.deltaTime * 10);
         }
 
-        velocity.y = rb.velocity.y;
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) && isGround)
         {
-            velocity.y = jumpScale;
+            rb.AddForce(Vector3.up * jumpScale, ForceMode.Impulse);
             transform.Translate(0, jumpScale * Time.deltaTime, 0);
         }
         
-        rb.velocity = velocity;
+        transform.Translate(dir * Time.deltaTime, Space.World);
     }
 
     private void CameraMove()
@@ -78,5 +92,11 @@ public class Player : MonoBehaviour
         camRotationX -= y * Time.deltaTime * camSensivity.y;
         camRotationX = Mathf.Clamp(camRotationX, -90, 90);
         camPivot.localRotation = Quaternion.Euler(camRotationX, 0, 0);
+    }
+
+    private void OnDrawGizmos() 
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position + groundCastOffset, groundCastRadius);    
     }
 }
