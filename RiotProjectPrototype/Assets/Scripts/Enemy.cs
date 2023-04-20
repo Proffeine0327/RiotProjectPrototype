@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private float maxHp;
+    [SerializeField] private float hp;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float attackTime;
     [SerializeField] private float damage;
@@ -12,8 +14,14 @@ public class Enemy : MonoBehaviour
 
     private float curAttackTime;
 
+    public void Damage(float amount)
+    {
+        hp -= amount;
+    }
+
     private void Start() 
     {
+        hp = maxHp;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -29,6 +37,12 @@ public class Enemy : MonoBehaviour
 
         if(curAttackTime > 0)
             curAttackTime -= Time.deltaTime;
+
+        if(hp <= 0)
+        {
+            Player.player.GetExp(200);
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionStay(Collision other) 
