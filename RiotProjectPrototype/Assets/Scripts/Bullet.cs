@@ -6,8 +6,14 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private float range;
     [SerializeField] private float speed;
+    [SerializeField] private GameObject hitparticle;
     private float damage;
     private Vector3 dir;
+
+    private void Start() 
+    {
+        Destroy(gameObject, 3);
+    }
 
     public void Init(float damage, Vector3 dir)
     {
@@ -23,6 +29,7 @@ public class Bullet : MonoBehaviour
             if(hit.CompareTag("Enemy"))
             {
                 hit.GetComponent<Enemy>().Damage(damage);
+                Instantiate(hitparticle, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
         }

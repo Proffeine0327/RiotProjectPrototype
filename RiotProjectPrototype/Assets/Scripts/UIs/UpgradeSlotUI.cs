@@ -10,7 +10,7 @@ public class UpgradeSlotUI : MonoBehaviour, IPointerDownHandler
     [SerializeField] private bool isSelected;
 
     public Player.PlayerUpgrade Upgrade { get { return upgrade; } }
-    public bool IsSelected { get { return isSelected; } }
+    public bool IsSelected { get { return isSelected; } set { isSelected = value; }}
 
     public void Init(Player.PlayerUpgrade upgrade)
     {

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8652750509267367977}
   - component: {fileID: 8652750509267367976}
   - component: {fileID: 8652750509267367983}
-  - component: {fileID: 8652750509267367982}
   - component: {fileID: 8652750509267367978}
   - component: {fileID: 8652750509267367979}
   m_Layer: 0
@@ -30,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 8652750509267367981}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.52, y: 0, z: -0.77}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -86,19 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8652750509267367982
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8652750509267367981}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!96 &8652750509267367978
 TrailRenderer:
   serializedVersion: 2
@@ -149,14 +135,23 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.08805084
+        time: 0.0028089883
+        value: 0.14501847
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0.018987343
+        inSlope: -0.17671868
+        outSlope: -0.17671868
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.14366205
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -212,3 +207,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 0.5
   speed: 20
+  hitparticle: {fileID: 9087666376973435249, guid: c2287b194a4f0d34a94e6ab92a53f0e3, type: 3}

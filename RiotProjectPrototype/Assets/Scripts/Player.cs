@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public enum PlayerUpgrade { IncreaseBulletSpawnAmount, DecreaseBulletSpawnTime, RandomExplosion}
+    public enum PlayerUpgrade { IncreaseBulletSpawnAmount, DecreaseBulletSpawnTime, RandomExplosion }
 
     public static Player player { get; private set; }
 
@@ -33,10 +33,17 @@ public class Player : MonoBehaviour
     [SerializeField] private float exp;
     [SerializeField] private float lvlupexp;
     [SerializeField] private int lvl;
+    [Header("Skill")]
+    [SerializeField] private float rollCooltime;
+    [SerializeField] private float rollDistance;
 
     private Rigidbody rb;
     private float camRotationX;
     private float curAttackTime;
+    private float curRollCooltime;
+
+    public float MaxHp { get { return maxHp; } }
+    public float Hp { get { return hp; } }
 
     public void Damage(float amount, Vector3 targetpos)
     {
@@ -73,10 +80,9 @@ public class Player : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
     }
-    
-    private void Start() 
+
+    private void Start()
     {
-        CanvasManager.manager.UpgradeUI.DisplayUpgradeUI();    
     }
 
     private void Update()
@@ -121,7 +127,7 @@ public class Player : MonoBehaviour
         transform.Rotate(0, x * camSensivity.x * Time.deltaTime, 0);
 
         camRotationX -= y * Time.deltaTime * camSensivity.y;
-        camRotationX = Mathf.Clamp(camRotationX, -90, 90);
+        camRotationX = Mathf.Clamp(camRotationX, -10, 80);
         camPivot.localRotation = Quaternion.Euler(camRotationX, 0, 0);
     }
 
@@ -136,7 +142,7 @@ public class Player : MonoBehaviour
             {
                 var bullet = Instantiate(bulletPrefeb, attackPoint.position, Quaternion.identity);
                 bullet.GetComponent<Bullet>().Init(damage, sortedbydistance[0].transform.position - attackPoint.position);
-                
+
                 curAttackTime = attackTime;
             }
         }
@@ -152,7 +158,13 @@ public class Player : MonoBehaviour
         {
             exp -= lvlupexp;
             lvl++;
+            CanvasManager.manager.UpgradeUI.DisplayUpgradeUI();
         }
+    }
+
+    private void Skill()
+    {
+
     }
 
     private void OnDrawGizmos()

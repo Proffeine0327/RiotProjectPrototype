@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
 
         if(hp <= 0)
         {
-            Player.player.GetExp(200);
+            Player.player.GetExp(50);
             Destroy(gameObject);
         }
     }
