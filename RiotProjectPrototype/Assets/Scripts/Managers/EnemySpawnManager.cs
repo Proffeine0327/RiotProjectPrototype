@@ -19,7 +19,7 @@ public class EnemySpawnManager : MonoBehaviour
             randompos.y = 2;
             
             Instantiate(enemy, randompos, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(0.5f, 4));
+            yield return new WaitForSeconds(Random.Range(0.25f, 2));
         }
     }
 }

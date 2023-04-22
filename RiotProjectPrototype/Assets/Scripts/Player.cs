@@ -36,11 +36,11 @@ public class Player : MonoBehaviour
     [Header("Skill")]
     [SerializeField] private float rollCooltime;
     [SerializeField] private float rollDistance;
+    [SerializeField] private bool canRoll;
 
     private Rigidbody rb;
     private float camRotationX;
     private float curAttackTime;
-    private float curRollCooltime;
 
     public float MaxHp { get { return maxHp; } }
     public float Hp { get { return hp; } }
@@ -81,15 +81,12 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Start()
-    {
-    }
-
     private void Update()
     {
         Move();
         CameraMove();
         Attack();
+        Skill();
         ExpControl();
     }
 
@@ -164,7 +161,25 @@ public class Player : MonoBehaviour
 
     private void Skill()
     {
+        if(Input.GetKeyDown(KeyCode.C) && canRoll)
+        {
+            canRoll = false;
+            StartCoroutine(RollSkill());
+        }
+    }
 
+    private IEnumerator RollSkill()
+    {
+        for(float t = 0; t < 0.25f; t += Time.deltaTime)
+        {
+            if(!Physics.CheckSphere(transform.position + transform.forward * 0.75f, 0.1f))
+                transform.Translate(transform.forward * rollDistance * Time.deltaTime / 0.25f, Space.World);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(rollCooltime);
+
+        canRoll = true;
     }
 
     private void OnDrawGizmos()
@@ -174,5 +189,8 @@ public class Player : MonoBehaviour
 
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 0.75f, 0.1f);
     }
 }

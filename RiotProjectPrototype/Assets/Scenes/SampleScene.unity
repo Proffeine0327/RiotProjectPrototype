@@ -1423,6 +1423,9 @@ MonoBehaviour:
   exp: 0
   lvlupexp: 1000
   lvl: 0
+  rollCooltime: 3
+  rollDistance: 10
+  canRoll: 1
 --- !u!23 &1750037069
 MeshRenderer:
   m_ObjectHideFlags: 0
