@@ -17,31 +17,24 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Move();
-        Jump();
         Attack();
     }
 
     private void Move()
     {
-        var dir = new Vector3(UIManager.manager.JoystickUI.Value.x, 0, UIManager.manager.JoystickUI.Value.y).normalized;
-        dir = transform.TransformDirection(dir);
+        var vel = new Vector3(UIManager.manager.JoystickUI.Value.x, 0, UIManager.manager.JoystickUI.Value.y).normalized;
+        vel = transform.TransformDirection(vel) * moveSpeed;
+        vel.y = rb.velocity.y;
 
-        dir.y = rb.velocity.y;
-
-        rb.velocity = dir * moveSpeed;
-    }
-
-    private void Jump()
-    {
         if(UIManager.manager.ButtonUI.GetButtonDown("JumpButton"))
-        {
-            Debug.Log("Jump!");
-        }
+            vel.y = jumpScale;
+        
+        rb.velocity = vel;
     }
 
     private void Attack()
     {
-        if(UIManager.manager.ButtonUI.GetButtonDown("AttackButton"))
+        if(UIManager.manager.ButtonUI.GetButtonDown("SkillButton"))
         {
             Debug.Log("Attack!");
         }

@@ -28,11 +28,17 @@ public class ButtonUIEditor : Editor
 
             EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width * 0.15f, EditorGUIUtility.singleLineHeight), $"Element {i}: ");
 
-            keyelement.stringValue = EditorGUI.TextField
+            EditorGUI.BeginChangeCheck();
+            var str = EditorGUI.DelayedTextField
             (
                 new Rect(rect.x + rect.width * 0.15f, rect.y, rect.width * 0.25f, EditorGUIUtility.singleLineHeight),
                 keyelement.stringValue
             );
+            if(EditorGUI.EndChangeCheck())
+            {
+                if(!(target as ButtonUI).buttons.ContainsKey(str))
+                    keyelement.stringValue = str;
+            }
 
             valueelement.objectReferenceValue = EditorGUI.ObjectField
             (
