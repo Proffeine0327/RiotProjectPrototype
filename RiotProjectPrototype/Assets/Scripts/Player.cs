@@ -8,14 +8,13 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float moveSpeed;
     [SerializeField] private float gravityScale;
-    [SerializeField] private float jumpScale;
-    [Header("aim")]
     [SerializeField] private Vector2 aimSensivity;
     [SerializeField] private Camera mainCam;
-
+     
     private CharacterController cc;
-    private float yVelocity;
+    
     private Vector2 aimVec;
+    private float yVelocity;
 
     private void Awake() 
     {
@@ -23,8 +22,8 @@ public class Player : MonoBehaviour
         Cursor.visible = false;
 
         player = this;
-
-        cc = GetComponent<CharacterController>();    
+        
+        cc = GetComponent<CharacterController>();
     }
 
     private void Update() 
@@ -40,12 +39,9 @@ public class Player : MonoBehaviour
 
         var velocity = new Vector3(h, 0, v);
         velocity = transform.TransformDirection(velocity).normalized * moveSpeed;
-
+        
         if(!cc.isGrounded) yVelocity -= 9.8f * gravityScale * Time.deltaTime;
         else yVelocity = 0;
-
-        if(Input.GetKeyDown(KeyCode.Space))
-            yVelocity = jumpScale;
 
         velocity.y = yVelocity;
 
@@ -56,12 +52,12 @@ public class Player : MonoBehaviour
     {
         var mouseX = Input.GetAxis("Mouse X");
         var mouseY = Input.GetAxis("Mouse Y");
-
+        
         aimVec.x += mouseX * aimSensivity.x * Time.deltaTime;
         aimVec.y -= mouseY * aimSensivity.y * Time.deltaTime;
         aimVec.y = Mathf.Clamp(aimVec.y, -85, 85);
 
-        transform.rotation = Quaternion.Euler(0, aimVec.x, 0);
+        transform.localRotation = Quaternion.Euler(0, aimVec.x, 0);
         mainCam.transform.localRotation = Quaternion.Euler(aimVec.y, 0, 0);
     }
 }
