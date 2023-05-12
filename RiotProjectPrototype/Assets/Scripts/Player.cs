@@ -24,9 +24,6 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         player = this;
 
         cc = GetComponent<CharacterController>();
@@ -41,11 +38,11 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        var h = Input.GetAxisRaw("Horizontal");
-        var v = Input.GetAxisRaw("Vertical");
+        var h = CanvasManager.manager.JoystickUI.Value.x;
+        var v = CanvasManager.manager.JoystickUI.Value.y;
 
         var velocity = new Vector3(h, 0, v);
-        velocity = transform.TransformDirection(velocity).normalized * moveSpeed;
+        velocity = transform.TransformDirection(velocity) * moveSpeed;
 
         if (!cc.isGrounded) yVelocity -= 9.8f * gravityScale * Time.deltaTime;
         else yVelocity = 0;
@@ -57,8 +54,8 @@ public class Player : MonoBehaviour
 
     private void CameraMove()
     {
-        var mouseX = Input.GetAxis("Mouse X");
-        var mouseY = Input.GetAxis("Mouse Y");
+        var mouseX = CanvasManager.manager.DragUI.Delta.x;
+        var mouseY = CanvasManager.manager.DragUI.Delta.y;
 
         aimVec.x += mouseX * aimSensivity.x * Time.deltaTime;
         aimVec.y -= mouseY * aimSensivity.y * Time.deltaTime;
@@ -74,11 +71,7 @@ public class Player : MonoBehaviour
         Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, interactDist, ~LayerMask.GetMask("Player"));
 
         if (hit.collider != null && hit.collider.gameObject.CompareTag("Interactable"))
-        {
             hit.collider.GetComponent<IInteractable>().DisplayUI();
-            if (Input.GetKeyDown(KeyCode.E))
-                hit.collider.GetComponent<IInteractable>().Interact();
-        }
     }
 
     private void OnDrawGizmos() 

@@ -25,11 +25,10 @@ public class EnemySpawnManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-
             var random = Random.Range(0, spawnInfos.Count);
 
             var enemy = Instantiate(enemyPrefeb, spawnInfos[random].SpawnPos, Quaternion.identity);
-            enemy.GetComponent<NavMeshAgent>().SetDestination(spawnInfos[random].Shutter.transform.position);
+            enemy.GetComponent<Enemy>().Init(spawnInfos[random].Shutter);
         }
     }
 }
@@ -37,9 +36,9 @@ public class EnemySpawnManager : MonoBehaviour
 [System.Serializable]
 public class SpawnInfo
 {
-    [SerializeField] private GameObject shutter;
+    [SerializeField] private Shutter shutter;
     [SerializeField] private Vector3 spawnPos;
 
-    public GameObject Shutter => shutter;
+    public Shutter Shutter => shutter;
     public Vector3 SpawnPos => spawnPos;
 }

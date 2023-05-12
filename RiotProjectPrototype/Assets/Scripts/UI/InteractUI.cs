@@ -5,14 +5,15 @@ using UnityEngine.UI;
 
 public class InteractUI : MonoBehaviour
 {
-    [SerializeField] private Text txt;
+    [SerializeField] private Button btn;
 
     private float time;
 
-    public void DisplayUI(string text, float t)
+    public void DisplayUI(System.Action ac, float t)
     {
         time = t;
-        txt.text = $"[E] : {text}";
+        btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => ac?.Invoke());
     }
 
     private void Update() 
@@ -20,8 +21,8 @@ public class InteractUI : MonoBehaviour
         if(time >= 0)
         {
             time -= Time.deltaTime;
-            txt.enabled = true;
+            btn.gameObject.SetActive(true);
         }
-        else txt.enabled = false;    
+        else btn.gameObject.SetActive(false);   
     }
 }
