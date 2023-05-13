@@ -97,12 +97,13 @@ public class Player : MonoBehaviour
             RaycastHit[] hits = Physics.RaycastAll(mainCam.transform.position, mainCam.transform.forward, 10000, ~LayerMask.GetMask("Player"));
             hits = hits.OrderBy((item) => Vector3.Distance(mainCam.transform.position, item.point)).ToArray();
 
+            bool isShooting = false;
             foreach (var hit in hits)
             {
                 if (hit.collider.CompareTag("Enemy"))
                 {
                     hit.collider.GetComponent<Enemy>().Damage(10);
-                    gunAnim.SetTrigger("shot");
+                    isShooting = true;
                 }
                 else
                 {
@@ -111,7 +112,12 @@ public class Player : MonoBehaviour
                 }
             }
 
-            curShootTime = shootTime;
+            if(isShooting)
+            {
+                SoundManager.manager.Play("gunShot", 0.1f);
+                gunAnim.SetTrigger("shot");
+                curShootTime = shootTime;
+            }
         }
     }
 
