@@ -18,6 +18,12 @@ public class InteractUI : MonoBehaviour
 
     private void Update() 
     {
+        if(GameManager.manager.IsStartGame)
+        {
+            btn.gameObject.SetActive(false);
+            return;
+        }
+
         if(time >= 0)
         {
             time -= Time.deltaTime;

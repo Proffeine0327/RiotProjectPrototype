@@ -15,20 +15,20 @@ public class EnemySpawnManager : MonoBehaviour
         manager = this;
     }
 
-    private void Start()
-    {
-        StartCoroutine(SpawnRoutine());
-    }
+    public void StartSpawning(int amount) => StartCoroutine(SpawnRoutine(amount));
 
-    private IEnumerator SpawnRoutine()
+    private IEnumerator SpawnRoutine(int amount)
     {
-        while (true)
+        var enemys = new List<GameObject>();
+
+        for (int i = 0; i < amount; i++)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(Random.Range(0.4f, 2f));
             var random = Random.Range(0, spawnInfos.Count);
 
             var enemy = Instantiate(enemyPrefeb, spawnInfos[random].SpawnPos, Quaternion.identity);
             enemy.GetComponent<Enemy>().Init(spawnInfos[random].Shutter);
+            enemys.Add(enemy);
         }
     }
 }

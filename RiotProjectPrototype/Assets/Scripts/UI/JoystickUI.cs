@@ -14,6 +14,20 @@ public class JoystickUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoi
 
     public Vector2 Value { get { return value; } }
 
+    private void Update() 
+    {
+        if(!GameManager.manager.IsStartGame)
+        {
+            bg.GetComponent<Image>().enabled = true;
+            GetComponent<Image>().enabled = true;
+        }
+        else
+        {
+            bg.GetComponent<Image>().enabled = false;
+            GetComponent<Image>().enabled = false;
+        }
+    }
+
     private void Start()
     {
         rt = transform as RectTransform;
