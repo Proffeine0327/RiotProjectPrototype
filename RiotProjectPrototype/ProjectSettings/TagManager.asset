@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Interactable
   - Enemy
+  - Castle
+  - PlayerUnit
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - Castle
   - 
   - 
   - 
