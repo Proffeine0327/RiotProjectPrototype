@@ -2,70 +2,73 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameCardManager : MonoBehaviour
+namespace second
 {
-    public static InGameCardManager manager { get; private set; }
-
-    [SerializeField] private Transform castleTarget;
-    [SerializeField] private RectTransform bg;
-    [SerializeField] private RectTransform cardParent;
-    [SerializeField] private GameObject cardPrefeb;
-    [SerializeField] private Material previewMaterial;
-    [Header("datas")]
-    [SerializeField] private float gage; //max : 10;
-    [SerializeField] private float gageChargeTime;
-    [SerializeField] private UnitDataTable unitdatas;
-    [SerializeField] private List<int> openCardIds = new List<int>();
-    
-    private Queue<int> closeCardIds = new Queue<int>();
-    private List<CardCell> cards = new List<CardCell>();
-
-    public float Gage => gage;
-
-    private void Awake() 
+    public class InGameCardManager : MonoBehaviour
     {
-        manager = this;
-    }
+        public static InGameCardManager manager { get; private set; }
 
-    private void Start() 
-    {
-        for(int i = 0; i < 10; i++) closeCardIds.Enqueue(i % 2);
-        for(int i = 0; i < 5; i++)
+        [SerializeField] private Transform castleTarget;
+        [SerializeField] private RectTransform bg;
+        [SerializeField] private RectTransform cardParent;
+        [SerializeField] private GameObject cardPrefeb;
+        [SerializeField] private Material previewMaterial;
+        [Header("datas")]
+        [SerializeField] private float gage; //max : 10;
+        [SerializeField] private float gageChargeTime;
+        [SerializeField] private UnitDataTable unitdatas;
+        [SerializeField] private List<int> openCardIds = new List<int>();
+
+        private Queue<int> closeCardIds = new Queue<int>();
+        private List<CardCell> cards = new List<CardCell>();
+
+        public float Gage => gage;
+
+        private void Awake()
         {
-            openCardIds.Add(closeCardIds.Dequeue());
-
-            cards.Add(Instantiate(cardPrefeb, cardParent).GetComponent<CardCell>());
-            cards[i].Init(bg, unitdatas, previewMaterial);
-            cards[i].UpdateState(openCardIds[i], i);
+            manager = this;
         }
-    }
 
-    public bool UseCard(int cardIndex, Vector3 spawnPos)
-    {
-        if(gage < unitdatas.Units[openCardIds[cardIndex]].Cost) return false;
+        private void Start()
+        {
+            for (int i = 0; i < 10; i++) closeCardIds.Enqueue(i % 2);
+            for (int i = 0; i < 5; i++)
+            {
+                openCardIds.Add(closeCardIds.Dequeue());
 
-        var selectCard = cards[cardIndex];
-        cards.RemoveAt(cardIndex);
-        cards.Add(selectCard);
-        selectCard.transform.localPosition = new Vector3(899.333f, -288, 0);
+                cards.Add(Instantiate(cardPrefeb, cardParent).GetComponent<CardCell>());
+                cards[i].Init(bg, unitdatas, previewMaterial);
+                cards[i].UpdateState(openCardIds[i], i);
+            }
+        }
 
-        var useCardId = openCardIds[cardIndex];
-        openCardIds.RemoveAt(cardIndex);
-        openCardIds.Add(closeCardIds.Dequeue());
-        closeCardIds.Enqueue(useCardId);
+        public bool UseCard(int cardIndex, Vector3 spawnPos)
+        {
+            if (gage < unitdatas.Units[openCardIds[cardIndex]].Cost) return false;
 
-        gage -= unitdatas.Units[useCardId].Cost;
-        var unit = Instantiate(unitdatas.Units[useCardId].Prefeb, spawnPos, Quaternion.identity).GetComponent<Unit>();
-        unit.Init(castleTarget, new string[] { "Enemy", "Castle" });
+            var selectCard = cards[cardIndex];
+            cards.RemoveAt(cardIndex);
+            cards.Add(selectCard);
+            selectCard.transform.localPosition = new Vector3(899.333f, -288, 0);
 
-        for(int i = 0; i < 5; i++) cards[i].UpdateState(openCardIds[i], i);
+            var useCardId = openCardIds[cardIndex];
+            openCardIds.RemoveAt(cardIndex);
+            openCardIds.Add(closeCardIds.Dequeue());
+            closeCardIds.Enqueue(useCardId);
 
-        return true;
-    }
+            gage -= unitdatas.Units[useCardId].Cost;
+            var unit = Instantiate(unitdatas.Units[useCardId].Prefeb, spawnPos, Quaternion.identity).GetComponent<Unit>();
+            unit.Init(castleTarget, new string[] { "Enemy", "Castle" });
 
-    private void Update() 
-    {
-        gage += Time.deltaTime / gageChargeTime;
-        gage = Mathf.Clamp(gage, 0, 10);
+            for (int i = 0; i < 5; i++) cards[i].UpdateState(openCardIds[i], i);
+
+            return true;
+        }
+
+        private void Update()
+        {
+            gage += Time.deltaTime / gageChargeTime;
+            gage = Mathf.Clamp(gage, 0, 10);
+        }
     }
 }

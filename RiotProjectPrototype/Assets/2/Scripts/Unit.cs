@@ -4,74 +4,77 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
 
-public class Unit : MonoBehaviour
+namespace second
 {
-    [SerializeField] private float detectRange;
-    [SerializeField] private float attackRange;
-
-    string[] targetTags;
-    private Transform castleTarget;
-    private Transform detectTarget;
-    private Transform atkTarget;
-    private NavMeshAgent agent;
-
-    private void Awake()
+    public class Unit : MonoBehaviour
     {
-        agent = GetComponent<NavMeshAgent>();
-    }
+        [SerializeField] private float detectRange;
+        [SerializeField] private float attackRange;
 
-    private void Start()
-    {
-        agent.stoppingDistance = attackRange;
-    }
+        string[] targetTags;
+        private Transform castleTarget;
+        private Transform detectTarget;
+        private Transform atkTarget;
+        private NavMeshAgent agent;
 
-    public void Init(Transform castleTarget, string[] targetTags)
-    {
-        this.castleTarget = castleTarget;
-        this.targetTags = targetTags;
-    }
-
-    private void Update()
-    {
-        SetTarget();
-
-        if (atkTarget != null) agent.enabled = false;
-        else
+        private void Awake()
         {
-            agent.SetDestination(castleTarget.position);
-            if (detectTarget != null) agent.SetDestination(detectTarget.position);
-        }
-    }
-
-    private void SetTarget()
-    {
-        if (atkTarget != null) return;
-
-        var detectUnits = Physics.OverlapSphere(transform.position, detectRange);
-        var attackUnits = Physics.OverlapSphere(transform.position, attackRange);
-
-        detectUnits = detectUnits.OrderBy(item => Vector3.Distance(item.transform.position, transform.position)).ToArray();
-        attackUnits = attackUnits.OrderBy(item => Vector3.Distance(item.transform.position, transform.position)).ToArray();
-
-        foreach (var unit in detectUnits)
-        {
-            foreach (var tag in targetTags)
-                if (unit.CompareTag(tag)) detectTarget = unit.transform;
+            agent = GetComponent<NavMeshAgent>();
         }
 
-        foreach (var unit in attackUnits)
+        private void Start()
         {
-            foreach (var tag in targetTags)
-                if (unit.CompareTag(tag)) atkTarget = unit.transform;
+            agent.stoppingDistance = attackRange;
         }
-    }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectRange);
+        public void Init(Transform castleTarget, string[] targetTags)
+        {
+            this.castleTarget = castleTarget;
+            this.targetTags = targetTags;
+        }
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        private void Update()
+        {
+            SetTarget();
+
+            if (atkTarget != null) agent.enabled = false;
+            else
+            {
+                agent.SetDestination(castleTarget.position);
+                if (detectTarget != null) agent.SetDestination(detectTarget.position);
+            }
+        }
+
+        private void SetTarget()
+        {
+            if (atkTarget != null) return;
+
+            var detectUnits = Physics.OverlapSphere(transform.position, detectRange);
+            var attackUnits = Physics.OverlapSphere(transform.position, attackRange);
+
+            detectUnits = detectUnits.OrderBy(item => Vector3.Distance(item.transform.position, transform.position)).ToArray();
+            attackUnits = attackUnits.OrderBy(item => Vector3.Distance(item.transform.position, transform.position)).ToArray();
+
+            foreach (var unit in detectUnits)
+            {
+                foreach (var tag in targetTags)
+                    if (unit.CompareTag(tag)) detectTarget = unit.transform;
+            }
+
+            foreach (var unit in attackUnits)
+            {
+                foreach (var tag in targetTags)
+                    if (unit.CompareTag(tag)) atkTarget = unit.transform;
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, detectRange);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
     }
 }
