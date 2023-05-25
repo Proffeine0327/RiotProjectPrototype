@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Castle
   - PlayerUnit
+  - AttackField
+  - WaitField
   layers:
   - Default
   - TransparentFX

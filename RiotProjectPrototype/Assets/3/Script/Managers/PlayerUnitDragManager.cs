@@ -26,7 +26,7 @@ public class PlayerUnitDragManager : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
             {
-                if (hit.collider.CompareTag("PlayerUnit"))
+                if (hit.collider.CompareTag("PlayerUnit") && !hit.collider.GetComponent<PlayerUnit>().IsOnAttackField)
                 {
                     isDraggingUnit = true;
                     dragUnit = hit.collider.GetComponent<PlayerUnit>();

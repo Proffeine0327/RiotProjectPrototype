@@ -37,25 +37,25 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\1\Scripts\Shutter.cs" />
+     <Compile Include="Assets\2\Scripts\InGameCardManager.cs" />
+     <Compile Include="Assets\3\Script\PlayerUnit.cs" />
      <Compile Include="Assets\1\Scripts\Managers\SoundManager.cs" />
      <Compile Include="Assets\1\Scripts\UI\RemainUI.cs" />
+     <Compile Include="Assets\2\Scripts\UnitDataTable.cs" />
+     <Compile Include="Assets\2\Scripts\CardCell.cs" />
+     <Compile Include="Assets\2\Scripts\Unit.cs" />
      <Compile Include="Assets\1\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\1\Scripts\Player.cs" />
      <Compile Include="Assets\1\Scripts\Enemy.cs" />
+     <Compile Include="Assets\3\Script\Managers\PlayerUnitDragManager.cs" />
      <Compile Include="Assets\1\Scripts\UI\DragUI.cs" />
      <Compile Include="Assets\1\Scripts\Managers\CanvasManager.cs" />
      <Compile Include="Assets\1\Scripts\IInteractable.cs" />
      <Compile Include="Assets\1\Scripts\UI\JoystickUI.cs" />
      <Compile Include="Assets\1\Scripts\UI\DecisionUI.cs" />
+     <Compile Include="Assets\2\Scripts\UI\GageUI.cs" />
      <Compile Include="Assets\1\Scripts\Managers\EnemySpawnManager.cs" />
      <Compile Include="Assets\1\Scripts\UI\InteractUI.cs" />
-     <Compile Include="Assets\2\Scripts\Unit.cs" />
-     <Compile Include="Assets\2\Scripts\UI\GageUI.cs" />
-     <Compile Include="Assets\2\Scripts\UnitDataTable.cs" />
-     <Compile Include="Assets\2\Scripts\InGameCardManager.cs" />
-     <Compile Include="Assets\2\Scripts\CardCell.cs" />
-     <Compile Include="Assets\3\Script\Managers\PlayerUnitDragManager.cs" />
-     <Compile Include="Assets\3\Script\PlayerUnit.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.15f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
