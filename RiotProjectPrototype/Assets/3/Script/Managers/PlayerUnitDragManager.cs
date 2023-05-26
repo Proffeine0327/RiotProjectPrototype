@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class PlayerUnitDragManager : MonoBehaviour
 {
-    public static PlayerUnitDragManager manager { get; private set; }
-
     private bool isDraggingUnit;
     private PlayerUnit dragUnit;
-
-    private void Awake()
-    {
-        manager = this;
-    }
 
     private void Update()
     {
@@ -41,15 +34,22 @@ public class PlayerUnitDragManager : MonoBehaviour
                 RaycastHit hit;
                 Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, LayerMask.GetMask("Ground"));
 
-                if(hit.collider != null)
-                    dragUnit.transform.position = new Vector3(hit.point.x, 1, Mathf.Clamp(hit.point.z - 0.5f, -10, -1));
+                if (hit.collider != null)
+                {
+                    dragUnit.transform.position = new Vector3(hit.point.x, 1, Mathf.Clamp(hit.point.z, -10, -1));
+                    dragUnit.Dragging(true);
+                }
             }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            isDraggingUnit = false;
-            dragUnit = null;
+            if (isDraggingUnit)
+            {
+                dragUnit.Dragging(false);
+                isDraggingUnit = false;
+                dragUnit = null;
+            }
         }
     }
 }
