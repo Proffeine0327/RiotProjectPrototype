@@ -10,6 +10,9 @@ TagManager:
   - PlayerUnit
   - AttackField
   - WaitField
+  - GroundGrid
+  - RoadGrid
+  - BlockedGrid
   layers:
   - Default
   - TransparentFX

@@ -1115,7 +1115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1245773552}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c75a8cf7eb35648b98e7b068a3e2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ca19c34aaaddb4b9c8d5a34b1ba4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
@@ -1229,7 +1229,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1324814513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c75a8cf7eb35648b98e7b068a3e2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ca19c34aaaddb4b9c8d5a34b1ba4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
@@ -1617,7 +1617,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1404459873}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c75a8cf7eb35648b98e7b068a3e2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ca19c34aaaddb4b9c8d5a34b1ba4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
@@ -2022,7 +2022,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1676372766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c75a8cf7eb35648b98e7b068a3e2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ca19c34aaaddb4b9c8d5a34b1ba4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
@@ -2478,7 +2478,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1856519490}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c75a8cf7eb35648b98e7b068a3e2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ca19c34aaaddb4b9c8d5a34b1ba4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
@@ -2592,7 +2592,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1857214266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c75a8cf7eb35648b98e7b068a3e2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ca19c34aaaddb4b9c8d5a34b1ba4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
@@ -2784,7 +2784,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1979787875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9c75a8cf7eb35648b98e7b068a3e2b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 15ca19c34aaaddb4b9c8d5a34b1ba4f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
