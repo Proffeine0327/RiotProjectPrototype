@@ -28,7 +28,7 @@ public class UnitStarUI : MonoBehaviour
             return;
         }
 
-        transform.position = Camera.main.WorldToScreenPoint(targetUnit.transform.position) + Vector3.up * 200;
+        transform.position = Camera.main.WorldToScreenPoint(targetUnit.transform.position + Vector3.up);
         img.sprite = starSprites[targetUnit.Lvl - 1];
     }
 }

@@ -8,19 +8,17 @@ public class PlayerUnit : MonoBehaviour
     [SerializeField] private GameObject rangeObject;
     [SerializeField] private GameObject bulletPrefeb;
 
-    private System.Action<PlayerUnit> onMouseDown;
     private bool isDragging;
     private Vector3 beforepos;
     private Vector2Int beforeindex;
-    [SerializeField] private int lvl = 1;
+    private int lvl = 1;
 
     public UnitData Data => data;
     public int Lvl => lvl;
 
-    public void Init(UnitData data, System.Action<PlayerUnit> onMouseDown = null)
+    public void Init(UnitData data)
     {
         this.data = data;
-        this.onMouseDown = onMouseDown;
         rangeObject.SetActive(false);
     }
 
@@ -33,7 +31,6 @@ public class PlayerUnit : MonoBehaviour
 
     private void OnMouseDown()
     {
-        onMouseDown?.Invoke(this);
         beforepos = transform.position;
         GridGroup.group.ActiveGrid(data.SetableGrid);
         rangeObject.SetActive(true);

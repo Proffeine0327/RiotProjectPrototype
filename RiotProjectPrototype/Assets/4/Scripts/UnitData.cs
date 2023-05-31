@@ -9,9 +9,10 @@ public class UnitData : ScriptableObject
     [SerializeField] private float maxHp;
     [SerializeField] private float attackSpeed;
     [SerializeField] private float attackRange;
-    [SerializeField] private GameObject prefeb;
     [SerializeField] private UnitType type;
+    [SerializeField] private GameObject prefeb;
     [SerializeField] private GridState setableGrid;
+    [SerializeField] private int cost;
     [Header("ui")]
     [SerializeField] private Sprite cardsprite;
 
@@ -19,6 +20,7 @@ public class UnitData : ScriptableObject
     public float MaxHp => maxHp;
     public float AttackSpeed => attackSpeed;
     public float AttackRange => attackRange;
+    public int Cost => cost;
     public GameObject Prefeb => prefeb;
     public UnitType Type => type;
     public GridState SetableGrid => setableGrid;

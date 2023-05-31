@@ -15,11 +15,12 @@ public class UnitCard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public bool IsDragging => isDragging;
 
-    public void Init(int index, Vector2 pos, UnitData data)
+    public void Init(int index, Vector2 pos, UnitData data, Sprite sprite)
     {
         this.index = index;
         this.pos = pos;
         this.targetData = data;
+        GetComponent<Image>().sprite = sprite;
     }
 
     public void OnDrag(PointerEventData eventData)
