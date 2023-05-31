@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82ba36aa429401439eb6478cc18be7c, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: 
+  unitname: Fire
   maxHp: 100
   attackSpeed: 1
+  attackRange: 3
   prefeb: {fileID: 6921866264336260573, guid: d343eb27133a0e54b8815f973a5e6adc, type: 3}
-  type: 1
+  type: 0
+  setableGrid: 0

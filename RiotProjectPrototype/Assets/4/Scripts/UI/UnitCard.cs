@@ -13,6 +13,8 @@ public class UnitCard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     private bool isDragging;
     private GameObject previewObject;
 
+    public bool IsDragging => isDragging;
+
     public void Init(int index, Vector2 pos, UnitData data)
     {
         this.index = index;
@@ -22,62 +24,54 @@ public class UnitCard : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public void OnDrag(PointerEventData eventData)
     {
+        if(!isDragging) return;
         transform.position = eventData.position;
 
-        var ray = Camera.main.ScreenPointToRay(eventData.position);
-        RaycastHit hitinfo;
-        if (Physics.Raycast(ray, out hitinfo, Mathf.Infinity, LayerMask.GetMask("Grid"))) spawnPos = hitinfo.collider.transform.position;
+        if (CheckGrid(out var hitinfo)) spawnPos = hitinfo.collider.transform.position;
+        else
+        {
+            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit);
+            spawnPos = new Vector3(hit.point.x, 0, hit.point.z);
+        }
         previewObject.transform.position = new Vector3(spawnPos.x, 0, spawnPos.z);
-        isDragging = true;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         transform.position = eventData.position;
-        UnitSetManager.manager.DragCard(targetData.Type);
         UnitSetManager.manager.ActiveMenu(false);
+        GridGroup.group.ActiveGrid(targetData.SetableGrid);
 
-        var ray = Camera.main.ScreenPointToRay(eventData.position);
-        RaycastHit hitinfo;
-        if (Physics.Raycast(ray, out hitinfo, Mathf.Infinity, LayerMask.GetMask("Grid"))) spawnPos = hitinfo.collider.transform.position;
+        if (CheckGrid(out var hitinfo)) spawnPos = hitinfo.collider.transform.position;
         previewObject = Instantiate(targetData.Prefeb, new Vector3(spawnPos.x, 0, spawnPos.z), Quaternion.identity);
         isDragging = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if(!isDragging) return;
+
         isDragging = false;
-        UnitSetManager.manager.ActiveMenu(true);
 
-        var ray = Camera.main.ScreenPointToRay(eventData.position);
-        RaycastHit hitinfo;
-        if (Physics.Raycast(ray, out hitinfo, Mathf.Infinity, LayerMask.GetMask("Grid")))
+        if (CheckGrid(out var hitinfo))
         {
-            if (targetData.Type == UnitType.normal)
-            {
-                if (hitinfo.collider.CompareTag("GroundGrid"))
-                {
-                    UnitSetManager.manager.UseCard(index, spawnPos);
-                    transform.localPosition = pos;
-                }
-            }
-
-            if (targetData.Type == UnitType.trap)
-            {
-                if (hitinfo.collider.CompareTag("RoadGrid"))
-                {
-                    UnitSetManager.manager.UseCard(index, spawnPos);
-                    transform.localPosition = pos;
-                }
-            }
+            if(UnitSetManager.manager.UseCard(index, hitinfo.collider.GetComponent<GridPlane>().YXIndex, spawnPos))
+                transform.localPosition = pos;
         }
-        SetGridGroup.group.ActiveGrid(false);
+        UnitSetManager.manager.ActiveMenu(true);
+        GridGroup.group.DisableAllGrid();
         Destroy(previewObject);
+    }
+
+    private bool CheckGrid(out RaycastHit hitinfo)
+    {
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        return Physics.Raycast(ray, out hitinfo, Mathf.Infinity, LayerMask.GetMask("Grid"));
     }
 
     private void Update()
     {
-        if(!isDragging)
+        if (!isDragging)
             transform.localPosition = Vector2.Lerp(transform.localPosition, pos, Time.deltaTime * 10);
     }
 }

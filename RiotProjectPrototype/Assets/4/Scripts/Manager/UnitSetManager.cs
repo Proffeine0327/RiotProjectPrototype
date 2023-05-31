@@ -8,38 +8,62 @@ public class UnitSetManager : MonoBehaviour
     public static UnitSetManager manager { get; private set; }
 
     [SerializeField] private GameObject bg;
-    [SerializeField] private Material groundMaterial;
-    [SerializeField] private Material roadMaterial;
+    [SerializeField] private GameObject rangePrefeb;
+    [SerializeField] private Transform staruigroup;
+    [SerializeField] private GameObject startuiprefeb;
     [SerializeField] private List<UnitData> deck = new List<UnitData>();
     [SerializeField] private List<UnitCard> cards = new List<UnitCard>();
 
-    private GameObject dragObject;
+    private int money;
+    private PlayerUnit[,] units;
+    private PlayerUnit dragObject;
+
+    public bool UseCard(int index, Vector2Int yx, Vector3 pos)
+    {
+        if(units[yx.x, yx.y] != null)
+        {
+            if(units[yx.x, yx.y].Lvl == 1 && units[yx.x, yx.y].Data == deck[index])  
+            {
+                units[yx.x, yx.y].LevelUp();
+                return true;
+            }
+            return false;
+        }
+
+        var unit = Instantiate(deck[index].Prefeb, new Vector3(pos.x, 0, pos.z), Quaternion.identity);
+        var startui = Instantiate(startuiprefeb, staruigroup);
+        startui.GetComponent<UnitStarUI>().Init(unit.GetComponent<PlayerUnit>());
+
+        units[yx.x, yx.y] = unit.GetComponent<PlayerUnit>();
+        units[yx.x, yx.y].Init(deck[index], (obj) => dragObject = obj);
+        return true;
+    }
+
+    public bool MoveUnit(Vector2Int from, Vector2Int to)
+    {
+        if(from == to) return false;
+
+        if(units[to.x, to.y] != null)
+        {
+            if(units[to.x, to.y].Lvl != 5 && units[from.x, from.y].Lvl == units[to.x, to.y].Lvl && units[from.x, from.y].Data == units[to.x, to.y].Data)
+            {
+                units[to.x, to.y].LevelUp();
+                Destroy(units[from.x, from.y].gameObject);
+                units[from.x, from.y] = null;
+                return true;
+            }
+            return false;
+        }
+
+        units[to.x, to.y] = units[from.x, from.y];
+        units[from.x, from.y] = null;
+        return true;
+    }
 
     public void ActiveMenu(bool active)
     {
         bg.GetComponent<Image>().enabled = active;
         foreach (var card in cards) card.GetComponent<Image>().enabled = active;
-    }
-
-    public void DragCard(UnitType type)
-    {
-        SetGridGroup.group.ActiveGrid(true);
-        if (type == UnitType.normal)
-        {
-            groundMaterial.color = Color.cyan;
-            roadMaterial.color = Color.red;
-        }
-        else
-        {
-            groundMaterial.color = Color.red;
-            roadMaterial.color = Color.cyan;
-        }
-    }
-
-    public bool UseCard(int index, Vector3 pos)
-    {
-        Instantiate(deck[index].Prefeb, new Vector3(pos.x, 0, pos.z), Quaternion.identity);
-        return true;
     }
 
     private void Awake()
@@ -50,42 +74,6 @@ public class UnitSetManager : MonoBehaviour
     private void Start()
     {
         for (int i = 0; i < cards.Count; i++) cards[i].Init(i, new Vector2(0, 300 - i * 200), deck[i]);
-    }
-
-    private void Update()
-    {
-        DraggingUnit();
-    }
-
-    private void DraggingUnit()
-    {
-        if (RectTransformUtility.RectangleContainsScreenPoint(bg.transform as RectTransform, Input.mousePosition)) return;
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitinfo;
-            if (Physics.Raycast(ray, out hitinfo, Mathf.Infinity, LayerMask.GetMask("Unit")))
-            {
-                dragObject = hitinfo.collider.gameObject;
-                ActiveMenu(false);
-                SetGridGroup.group.ActiveGrid(true);
-            }
-        }
-
-        if (Input.GetMouseButton(0) && dragObject != null)
-        {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitinfo;
-            if (Physics.Raycast(ray, out hitinfo, Mathf.Infinity, LayerMask.GetMask("Grid")))
-                dragObject.transform.position = new Vector3(hitinfo.collider.transform.position.x, 0, hitinfo.collider.transform.position.z);
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            dragObject = null;
-            ActiveMenu(true);
-            SetGridGroup.group.ActiveGrid(false);
-        }
+        units = new PlayerUnit[GridGroup.group.XYSize.y, GridGroup.group.XYSize.x];
     }
 }

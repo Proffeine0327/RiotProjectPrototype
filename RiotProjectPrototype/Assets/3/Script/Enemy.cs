@@ -3,46 +3,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Unit
+namespace third
 {
-    [SerializeField] private float attackRange;
-    [SerializeField] private float attackTime;
-    [SerializeField] private GameObject bloodParticle;
 
-    private float curAttackTime;
-    private PlayerUnit targetUnit;
-
-    protected override void Start()
+    public class Enemy : Unit
     {
-        base.Start();
-    }
+        [SerializeField] private float attackRange;
+        [SerializeField] private float attackTime;
+        [SerializeField] private GameObject bloodParticle;
 
-    protected override void Update()
-    {
-        if(curHp <= 0)
+        private float curAttackTime;
+        private PlayerUnit targetUnit;
+
+        protected override void Start()
         {
-            Instantiate(bloodParticle, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-            return;
+            base.Start();
         }
 
-        if (curAttackTime > 0) curAttackTime -= Time.deltaTime;
-        if (targetUnit != null)
+        protected override void Update()
         {
-            if (Vector3.Distance(transform.position, targetUnit.transform.position) <= attackRange)
+            if (curHp <= 0)
             {
-                if (curAttackTime <= 0)
-                {
-                    targetUnit.Damage(20);
+                Instantiate(bloodParticle, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+                return;
+            }
 
-                    curAttackTime = attackTime;
+            if (curAttackTime > 0) curAttackTime -= Time.deltaTime;
+            if (targetUnit != null)
+            {
+                if (Vector3.Distance(transform.position, targetUnit.transform.position) <= attackRange)
+                {
+                    if (curAttackTime <= 0)
+                    {
+                        targetUnit.Damage(20);
+
+                        curAttackTime = attackTime;
+                    }
                 }
             }
-        }
-        else
-        {
-            var enemys = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Unit"));
-            if (enemys.Length != 0) targetUnit = enemys[0].GetComponent<PlayerUnit>();
+            else
+            {
+                var enemys = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Unit"));
+                if (enemys.Length != 0) targetUnit = enemys[0].GetComponent<PlayerUnit>();
+            }
         }
     }
 }
