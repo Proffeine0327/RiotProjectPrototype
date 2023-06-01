@@ -26,7 +26,7 @@ public class PlayerUnit : MonoBehaviour
 
     private void Start()
     {
-        rangeObject.transform.localScale = new Vector3(data.AttackRange * 2, 0.005f, data.AttackRange * 2);
+        rangeObject.transform.localScale = new Vector3(data.AttackRange * 2 / transform.lossyScale.x, 0.005f, data.AttackRange * 2 / transform.lossyScale.x);
     }
 
     private void OnMouseDown()

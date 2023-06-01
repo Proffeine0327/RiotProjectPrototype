@@ -22,17 +22,33 @@ public class UnitSetManager : MonoBehaviour
 
     public bool UseCard(int index, Vector2Int yx, Vector3 pos)
     {
-        if(money < deck[index].Cost) return false;
-        if(units[yx.x, yx.y] != null)
+        if (money < deck[index].Cost)
         {
-            if(units[yx.x, yx.y].Data.Type != UnitType.trap && units[yx.x, yx.y].Lvl == 1 && units[yx.x, yx.y].Data == deck[index])  
-            {
-                units[yx.x, yx.y].LevelUp();
-                Instantiate(mergeParticle, units[yx.x, yx.y].transform.position + Vector3.up * 0.6f, Quaternion.identity);
-                money -= deck[index].Cost;
-                return true;
-            }
+            ExplainUI.ui.DisplayUI("돈이 부족합니다", 2f, Color.red);
             return false;
+        }
+        if (units[yx.x, yx.y] != null)
+        {
+            if (units[yx.x, yx.y].Data.Type == UnitType.trap)
+            {
+                ExplainUI.ui.DisplayUI("이 유닛은 합칠 수 없습니다", 2f, Color.red);
+                return false;
+            }
+            if (units[yx.x, yx.y].Lvl != 1)
+            {
+                ExplainUI.ui.DisplayUI("레벨이 다릅니다", 2f, Color.red);
+                return false;
+            }
+            if (units[yx.x, yx.y].Data != deck[index])
+            {
+                ExplainUI.ui.DisplayUI("다른 유닛입니다", 2f, Color.red);
+                return false;
+            }
+
+            units[yx.x, yx.y].LevelUp();
+            Instantiate(mergeParticle, units[yx.x, yx.y].transform.position + Vector3.up * 0.6f, Quaternion.identity);
+            money -= deck[index].Cost;
+            return true;
         }
 
         var unit = Instantiate(deck[index].Prefeb, new Vector3(pos.x, 0, pos.z), Quaternion.identity);
@@ -47,19 +63,36 @@ public class UnitSetManager : MonoBehaviour
 
     public bool MoveUnit(Vector2Int from, Vector2Int to)
     {
-        if(from == to) return false;
+        if (from == to) return false;
 
-        if(units[to.x, to.y] != null)
+        if (units[to.x, to.y] != null)
         {
-            if(units[to.x, to.y].Data.Type != UnitType.trap && units[to.x, to.y].Lvl != 5 && units[from.x, from.y].Lvl == units[to.x, to.y].Lvl && units[from.x, from.y].Data == units[to.x, to.y].Data)
+            if (units[to.x, to.y].Data.Type == UnitType.trap)
             {
-                units[to.x, to.y].LevelUp();
-                Destroy(units[from.x, from.y].gameObject);
-                units[from.x, from.y] = null;
-                Instantiate(mergeParticle, units[to.x, to.y].transform.position + Vector3.up * 0.6f, Quaternion.identity);
-                return true;
+                ExplainUI.ui.DisplayUI("이 유닛은 합칠 수 없습니다", 2f, Color.red);
+                return false;
             }
-            return false;
+            if (units[to.x, to.y].Lvl == 5)
+            {
+                ExplainUI.ui.DisplayUI("이미 한계 레벨에 도달하였습니다", 2f, Color.red);
+                return false;
+            }
+            if (units[from.x, from.y].Lvl != units[to.x, to.y].Lvl)
+            {
+                ExplainUI.ui.DisplayUI("레벨이 다릅니다", 2f, Color.red);
+                return false;
+            }
+            if (units[from.x, from.y].Data != units[to.x, to.y].Data)
+            {
+                ExplainUI.ui.DisplayUI("다른 유닛입니다", 2f, Color.red);
+                return false;
+            }
+
+            units[to.x, to.y].LevelUp();
+            Destroy(units[from.x, from.y].gameObject);
+            units[from.x, from.y] = null;
+            Instantiate(mergeParticle, units[to.x, to.y].transform.position + Vector3.up * 0.6f, Quaternion.identity);
+            return true;
         }
 
         units[to.x, to.y] = units[from.x, from.y];

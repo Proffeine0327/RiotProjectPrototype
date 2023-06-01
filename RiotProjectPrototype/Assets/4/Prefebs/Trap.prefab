@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2689513364489176819}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.765, y: -0.11, z: 0.413}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8381062293390870481}
@@ -114,7 +114,6 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: f14edfb3eec2c1b47a11f735df5c4697, type: 2}
   rangeObject: {fileID: 8381062293390870492}
   bulletPrefeb: {fileID: 0}
-  lvl: 1
 --- !u!1001 &2689513363617719961
 PrefabInstance:
   m_ObjectHideFlags: 0
