@@ -11,6 +11,7 @@ public class UnitSetManager : MonoBehaviour
     [SerializeField] private GameObject rangePrefeb;
     [SerializeField] private Transform staruigroup;
     [SerializeField] private GameObject startuiprefeb;
+    [SerializeField] private GameObject mergeParticle;
     [SerializeField] private List<UnitData> deck = new List<UnitData>();
     [SerializeField] private List<UnitCard> cards = new List<UnitCard>();
 
@@ -27,6 +28,7 @@ public class UnitSetManager : MonoBehaviour
             if(units[yx.x, yx.y].Data.Type != UnitType.trap && units[yx.x, yx.y].Lvl == 1 && units[yx.x, yx.y].Data == deck[index])  
             {
                 units[yx.x, yx.y].LevelUp();
+                Instantiate(mergeParticle, units[yx.x, yx.y].transform.position + Vector3.up * 0.6f, Quaternion.identity);
                 money -= deck[index].Cost;
                 return true;
             }
@@ -54,6 +56,7 @@ public class UnitSetManager : MonoBehaviour
                 units[to.x, to.y].LevelUp();
                 Destroy(units[from.x, from.y].gameObject);
                 units[from.x, from.y] = null;
+                Instantiate(mergeParticle, units[to.x, to.y].transform.position + Vector3.up * 0.6f, Quaternion.identity);
                 return true;
             }
             return false;
